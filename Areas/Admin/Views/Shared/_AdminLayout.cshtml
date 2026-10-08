@@ -1,0 +1,57 @@
+﻿@{
+    var current = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Админ-панель</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">Админ-панель</a>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-light">@User.Identity?.Name</span>
+                <a class="btn btn-outline-light btn-sm" asp-area="" asp-controller="Home" asp-action="Index">На сайт</a>
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                    <button type="submit" class="btn btn-light btn-sm">Выйти</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar">
+            <nav class="nav flex-column">
+            <a class="nav-link @(current == "Home" ? "active" : "")" asp-area="Admin" asp-controller="Home" asp-action="Index">Главная</a>
+            <div class="sidebar-title">Таблицы</div>
+            <a class="nav-link @(current == "Roles" ? "active" : "")" asp-area="Admin" asp-controller="Roles" asp-action="Index">Роли</a>
+            <a class="nav-link @(current == "Users" ? "active" : "")" asp-area="Admin" asp-controller="Users" asp-action="Index">Пользователи</a>
+            <a class="nav-link @(current == "Categories" ? "active" : "")" asp-area="Admin" asp-controller="Categories" asp-action="Index">Категории</a>
+            <a class="nav-link @(current == "Products" ? "active" : "")" asp-area="Admin" asp-controller="Products" asp-action="Index">Товары</a>
+            <a class="nav-link @(current == "Carts" ? "active" : "")" asp-area="Admin" asp-controller="Carts" asp-action="Index">Корзины</a>
+            <a class="nav-link @(current == "CartItems" ? "active" : "")" asp-area="Admin" asp-controller="CartItems" asp-action="Index">Позиции корзин</a>
+            <a class="nav-link @(current == "Orders" ? "active" : "")" asp-area="Admin" asp-controller="Orders" asp-action="Index">Заказы</a>
+            <a class="nav-link @(current == "OrderItems" ? "active" : "")" asp-area="Admin" asp-controller="OrderItems" asp-action="Index">Позиции заказов</a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                </div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

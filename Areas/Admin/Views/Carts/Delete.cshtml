@@ -1,0 +1,31 @@
+﻿@model WebApplication1.Models.Cart
+
+@{
+    ViewData["Title"] = "Удаление — Корзины";
+}
+
+<h2 class="mb-3">Удаление записи: Корзина</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="alert alert-warning">Вы действительно хотите удалить эту запись?</div>
+        <dl class="row">
+        <dt class="col-sm-4">ID</dt>
+        <dd class="col-sm-8">@Model.Id</dd>
+        <dt class="col-sm-4">Пользователь</dt>
+        <dd class="col-sm-8">@Model.User.UserLogin</dd>
+        <dt class="col-sm-4">Позиций в корзине</dt>
+        <dd class="col-sm-8">@Model.CartItems.Count</dd>
+        </dl>
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-danger">Да, удалить</button>
+            <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>

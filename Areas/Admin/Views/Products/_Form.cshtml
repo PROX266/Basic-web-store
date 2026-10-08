@@ -1,0 +1,29 @@
+﻿@model WebApplication1.Models.Product
+
+<div class="mb-3">
+    <label asp-for="ProductName" class="form-label">Название товара</label>
+    <input asp-for="ProductName" class="form-control" />
+    <span asp-validation-for="ProductName" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Price" class="form-label">Цена</label>
+    <input asp-for="Price" type="text" inputmode="decimal" class="form-control" placeholder="Например: 1999,99" />
+    <span asp-validation-for="Price" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="CategoryId" class="form-label">Категория</label>
+    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+    <span asp-validation-for="CategoryId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label class="form-label">Изображение</label>
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <div class="mb-2">
+            <img src="@Url.Content("~" + Model.ImagePath)" alt="" style="max-width: 160px; max-height: 160px; object-fit: contain; border: 1px solid #dee2e6; border-radius: 6px; padding: 4px; background: #fff;" />
+        </div>
+    }
+    <input type="file" name="imageFile" accept=".jpg,.jpeg,.png,.gif,.webp" class="form-control" />
+    <div class="form-text">JPG, PNG, GIF или WEBP, до 2 МБ. Если файл не выбран — изображение не изменится.</div>
+    <span asp-validation-for="ImagePath" class="text-danger"></span>
+</div>

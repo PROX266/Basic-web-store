@@ -1,0 +1,17 @@
+﻿@model WebApplication1.Models.CartItem
+
+<div class="mb-3">
+    <label asp-for="CartId" class="form-label">Корзина</label>
+    <select asp-for="CartId" asp-items="ViewBag.Carts" class="form-select"></select>
+    <span asp-validation-for="CartId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="ProductId" class="form-label">Товар</label>
+    <select asp-for="ProductId" asp-items="ViewBag.Products" class="form-select"></select>
+    <span asp-validation-for="ProductId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Quantity" class="form-label">Количество</label>
+    <input asp-for="Quantity" type="number" min="1" class="form-control" />
+    <span asp-validation-for="Quantity" class="text-danger"></span>
+</div>

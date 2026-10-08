@@ -1,0 +1,119 @@
+@model WebApplication1.ViewModels.CatalogViewModel
+
+@{
+    ViewData["Title"] = "Каталог товаров";
+
+    var descriptions = new Dictionary<int, string>
+    {
+        { 1, "Смартфон Apple iPhone 14 с диагональю 6.1 дюйма, двойной камерой 12 МП и процессором A15 Bionic. Поддержка 5G, Ceramic Shield, разъем Lightning." },
+        { 2, "Флагманский смартфон Samsung Galaxy S23 с экраном Dynamic AMOLED 2X 6.1 дюйма, тройной камерой 50 МП + 10 МП + 12 МП и процессором Snapdragon 8 Gen 2." },
+        { 3, "Ноутбук Apple MacBook Air с чипом M1, 13.3-дюймовым Retina дисплеем, 8 ГБ RAM и 256 ГБ SSD. Бесшумная работа, до 18 часов работы от батареи." },
+        { 4, "Беспроводная мышь Logitech с тихими кнопками, регулировкой DPI и надежным соединением 2.4 ГГц. Подходит для работы и учебы." }
+    };
+
+    var sortOptions = new[]
+    {
+        ("name_asc", "Название: А → Я"),
+        ("name_desc", "Название: Я → А"),
+        ("price_asc", "Цена: по возрастанию"),
+        ("price_desc", "Цена: по убыванию")
+    };
+
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+    <p class="page-sub">Найдено товаров: @Model.TotalItems</p>
+</div>
+
+<form method="get" asp-action="Index" class="filter-bar">
+    <div class="filter-field filter-search">
+        <label for="search">Поиск</label>
+        <input type="text" id="search" name="search" value="@Model.Search" placeholder="Название товара" class="form-control" />
+    </div>
+    <div class="filter-field">
+        <label for="categoryId">Категория</label>
+        <select id="categoryId" name="categoryId" class="form-select">
+            <option value="">Все категории</option>
+            @foreach (var c in Model.Categories)
+            {
+                <option value="@c.Id" selected="@(Model.CategoryId == c.Id)">@c.NameCategories</option>
+            }
+        </select>
+    </div>
+    <div class="filter-field">
+        <label for="sort">Сортировка</label>
+        <select id="sort" name="sort" class="form-select">
+            @foreach (var (value, text) in sortOptions)
+            {
+                <option value="@value" selected="@(Model.Sort == value)">@text</option>
+            }
+        </select>
+    </div>
+    <div class="filter-actions">
+        <button type="submit" class="btn-shop">Применить</button>
+        <a asp-action="Index" class="btn-outline-shop">Сбросить</a>
+    </div>
+</form>
+
+@if (Model.Products.Any())
+{
+    <div class="product-grid">
+        @foreach (var item in Model.Products)
+        {
+            <article class="product-card">
+                <a asp-action="Details" asp-route-id="@item.Id" class="product-img-wrap">
+                    <img src="@Url.Content("~" + item.ImageUrl)" alt="@item.ProductName" class="product-img" />
+                </a>
+                <div class="product-body">
+                    <span class="category-badge">@item.Category?.NameCategories</span>
+                    <h3 class="product-title">
+                        <a asp-action="Details" asp-route-id="@item.Id">@item.ProductName</a>
+                    </h3>
+                    <p class="product-description">
+                        @(descriptions.ContainsKey(item.Id) ? descriptions[item.Id] : "Описание товара временно отсутствует.")
+                    </p>
+                    <div class="price-tag">@item.Price.ToString("N2") ₽</div>
+                    <div class="product-actions">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn-outline-shop">Подробнее</a>
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-form">
+                            <input type="hidden" name="productId" value="@item.Id" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <input type="number" name="quantity" value="1" min="1" max="99" class="qty-input" />
+                            <button type="submit" class="btn-shop">В корзину</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="pager" aria-label="Страницы каталога">
+            @if (Model.Page > 1)
+            {
+                <a asp-action="Index" asp-route-search="@Model.Search" asp-route-categoryId="@Model.CategoryId"
+                   asp-route-sort="@Model.Sort" asp-route-page="@(Model.Page - 1)">←</a>
+            }
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a asp-action="Index" asp-route-search="@Model.Search" asp-route-categoryId="@Model.CategoryId"
+                   asp-route-sort="@Model.Sort" asp-route-page="@i" class="@(i == Model.Page ? "active" : "")">@i</a>
+            }
+            @if (Model.Page < Model.TotalPages)
+            {
+                <a asp-action="Index" asp-route-search="@Model.Search" asp-route-categoryId="@Model.CategoryId"
+                   asp-route-sort="@Model.Sort" asp-route-page="@(Model.Page + 1)">→</a>
+            }
+        </nav>
+    }
+}
+else
+{
+    <div class="empty-box">
+        <p>По вашему запросу ничего не найдено</p>
+        <a asp-action="Index" class="btn-shop">Показать все товары</a>
+    </div>
+}

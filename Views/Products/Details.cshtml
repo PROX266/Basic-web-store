@@ -1,0 +1,38 @@
+﻿@model WebApplication1.Models.Product
+
+@{
+    ViewData["Title"] = Model.ProductName;
+
+    var descriptions = new Dictionary<int, string>
+    {
+        { 1, "Apple iPhone 14 — это мощный смартфон с передовыми технологиями. Оснащен дисплеем Super Retina XDR 6.1 дюйма, процессором A15 Bionic, который обеспечивает высокую производительность. Двойная камера 12 МП с режимом киносъемки и фотографическим стилем. Защита от воды IP68, Ceramic Shield, разъем Lightning. Доступен в нескольких цветах." },
+        { 2, "Samsung Galaxy S23 — компактный флагман с мощным оснащением. Экран Dynamic AMOLED 2X 6.1 дюйма с частотой 120 Гц. Основная камера 50 МП с оптической стабилизацией, телефото 10 МП с 3x оптическим зумом и ультраширокоугольная 12 МП. Процессор Snapdragon 8 Gen 2 для Galaxy, аккумулятор 3900 мАч, поддержка 25 Вт зарядки." },
+        { 3, "MacBook Air с чипом Apple M1 — идеальный ноутбук для работы и учебы. 13.3-дюймовый Retina дисплей с высоким разрешением, 8-ядерный процессор, 7-ядерная графика, 8 ГБ объединенной памяти и 256 ГБ SSD. Бесшумная работа благодаря пассивному охлаждению, до 18 часов автономной работы. Клавиатура Magic Keyboard и улучшенная акустика." },
+        { 4, "Мышь Logitech — это надежный аксессуар для повседневного использования. Технология беспроводной связи 2.4 ГГц с мини-приемником, тихие кнопки, регулировка разрешения (1000-2500 DPI). Работает до 12 месяцев от одной батарейки AA. Эргономичный дизайн, подходит для правшей и левшей." }
+    };
+}
+
+<div class="detail-card">
+    <div class="detail-image">
+        <img src="@Url.Content("~" + Model.ImageUrl)" alt="@Model.ProductName" />
+    </div>
+    <div class="detail-info">
+        <span class="category-badge">@Model.Category?.NameCategories</span>
+        <h1 class="detail-title">@Model.ProductName</h1>
+        <div class="detail-price">@Model.Price.ToString("N2") ₽</div>
+
+        <p class="detail-description">
+            @(descriptions.ContainsKey(Model.Id)
+                ? descriptions[Model.Id]
+                : "Подробное описание товара временно отсутствует. Пожалуйста, обратитесь к консультанту для получения дополнительной информации.")
+        </p>
+
+        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-form add-form-lg">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <input type="number" name="quantity" value="1" min="1" max="99" class="qty-input" />
+            <button type="submit" class="btn-shop btn-lg">Добавить в корзину</button>
+        </form>
+
+        <a asp-action="Index" class="btn-outline-shop mt-3">← Вернуться к каталогу</a>
+    </div>
+</div>

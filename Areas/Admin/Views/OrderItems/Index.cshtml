@@ -1,0 +1,49 @@
+﻿@model IEnumerable<WebApplication1.Models.OrderItem>
+
+@{
+    ViewData["Title"] = "Позиции заказов";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Позиции заказов</h2>
+    <a asp-action="Create" class="btn btn-primary">+ Добавить</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Заказ</th>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Цена за единицу</th>
+                    <th class="text-end">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>№ @item.OrderId</td>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("N2") ₽</td>
+                    <td class="text-end">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Изменить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Удалить</a>
+                    </td>
+                </tr>
+                }
+                @if (!Model.Any())
+                {
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Записей пока нет</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

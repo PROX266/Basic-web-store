@@ -1,0 +1,47 @@
+@model IEnumerable<WebApplication1.Models.Order>
+
+@{
+    ViewData["Title"] = "Мои заказы";
+}
+
+<div class="page-header">
+    <h1>@ViewData["Title"]</h1>
+</div>
+
+@if (Model.Any())
+{
+    <div class="panel">
+        <div class="table-scroll">
+            <table class="shop-table">
+                <thead>
+                    <tr>
+                        <th>№ заказа</th>
+                        <th>Дата</th>
+                        <th>Позиций</th>
+                        <th>Сумма</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in Model)
+                    {
+                        <tr>
+                            <td><strong>№ @o.Id</strong></td>
+                            <td>@o.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@o.OrderItems.Sum(i => i.Quantity) шт.</td>
+                            <td class="money">@o.OrderItems.Sum(i => i.Quantity * i.Price).ToString("N2") ₽</td>
+                            <td class="text-end"><a asp-action="Details" asp-route-id="@o.Id" class="btn-outline-shop">Подробнее</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="empty-box">
+        <p>У вас пока нет заказов</p>
+        <a asp-controller="Products" asp-action="Index" class="btn-shop">Перейти к каталогу</a>
+    </div>
+}

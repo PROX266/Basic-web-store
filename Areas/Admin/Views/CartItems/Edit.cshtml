@@ -1,0 +1,19 @@
+﻿@model WebApplication1.Models.CartItem
+
+@{
+    ViewData["Title"] = "Изменение — Позиции корзин";
+}
+
+<h2 class="mb-3">Изменение записи: Позиция корзины</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <partial name="_Form" model="Model" />
+            <button type="submit" class="btn btn-success">Сохранить</button>
+            <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>

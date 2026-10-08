@@ -1,0 +1,29 @@
+﻿@model WebApplication1.Models.Category
+
+@{
+    ViewData["Title"] = "Удаление — Категории";
+}
+
+<h2 class="mb-3">Удаление записи: Категория</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="alert alert-warning">Вы действительно хотите удалить эту запись?</div>
+        <dl class="row">
+        <dt class="col-sm-4">ID</dt>
+        <dd class="col-sm-8">@Model.Id</dd>
+        <dt class="col-sm-4">Название</dt>
+        <dd class="col-sm-8">@Model.NameCategories</dd>
+        </dl>
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-danger">Да, удалить</button>
+            <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>

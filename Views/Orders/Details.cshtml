@@ -1,0 +1,47 @@
+@model WebApplication1.Models.Order
+
+@{
+    ViewData["Title"] = $"Заказ № {Model.Id}";
+}
+
+<div class="page-header page-header-row">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="page-sub">от @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+    </div>
+    <a asp-action="Index" class="btn-outline-shop">← Все заказы</a>
+</div>
+
+<div class="panel">
+    <div class="table-scroll">
+        <table class="shop-table">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderItems)
+                {
+                    <tr>
+                        <td>
+                            <div class="cart-product">
+                                <img src="@Url.Content("~" + item.Product.ImageUrl)" alt="@item.Product.ProductName" class="cart-thumb" />
+                                <span class="cart-product-name">@item.Product.ProductName</span>
+                            </div>
+                        </td>
+                        <td class="money">@item.Price.ToString("N2") ₽</td>
+                        <td>@item.Quantity</td>
+                        <td class="money">@((item.Quantity * item.Price).ToString("N2")) ₽</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="cart-footer">
+        <div class="cart-total">Итого: @Model.OrderItems.Sum(i => i.Quantity * i.Price).ToString("N2") ₽</div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+
+    var sections = new[]
+    {
+        new { Controller = "Roles", Title = "Роли", Count = (int)ViewBag.Roles },
+        new { Controller = "Users", Title = "Пользователи", Count = (int)ViewBag.Users },
+        new { Controller = "Categories", Title = "Категории", Count = (int)ViewBag.Categories },
+        new { Controller = "Products", Title = "Товары", Count = (int)ViewBag.Products },
+        new { Controller = "Carts", Title = "Корзины", Count = (int)ViewBag.Carts },
+        new { Controller = "CartItems", Title = "Позиции корзин", Count = (int)ViewBag.CartItems },
+        new { Controller = "Orders", Title = "Заказы", Count = (int)ViewBag.Orders },
+        new { Controller = "OrderItems", Title = "Позиции заказов", Count = (int)ViewBag.OrderItems }
+    };
+}
+
+<h2 class="mb-1">Административная панель</h2>
+<p class="text-muted mb-4">Управление данными интернет-магазина. Выберите раздел:</p>
+
+<div class="row g-3">
+    @foreach (var s in sections)
+    {
+        <div class="col-md-6 col-xl-3">
+            <a asp-controller="@s.Controller" asp-action="Index" class="text-decoration-none">
+                <div class="card dashboard-card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">@s.Title</h5>
+                        <div class="display-6 text-primary">@s.Count</div>
+                        <small class="text-muted">записей</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>

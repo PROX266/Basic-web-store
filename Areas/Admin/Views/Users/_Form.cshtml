@@ -1,0 +1,30 @@
+﻿@model WebApplication1.Models.User
+
+<div class="mb-3">
+    <label asp-for="UserLogin" class="form-label">Логин</label>
+    <input asp-for="UserLogin" class="form-control" />
+    <span asp-validation-for="UserLogin" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="UserName" class="form-label">Имя пользователя</label>
+    <input asp-for="UserName" class="form-control" />
+    <span asp-validation-for="UserName" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="RoleId" class="form-label">Роль</label>
+    <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-select"></select>
+    <span asp-validation-for="RoleId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label class="form-label">Пароль</label>
+    <input type="password" name="password" class="form-control" autocomplete="new-password" />
+    <span asp-validation-for="UserPassword" class="text-danger"></span>
+    @if (Model.Id != 0)
+    {
+        <div class="form-text">Оставьте поле пустым, чтобы не менять пароль.</div>
+    }
+</div>
+<div class="form-check mb-3">
+    <input asp-for="IsActive" class="form-check-input" />
+    <label asp-for="IsActive" class="form-check-label">Активен</label>
+</div>

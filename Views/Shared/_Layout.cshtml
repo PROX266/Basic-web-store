@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Интернет-магазин</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md site-navbar">
+            <div class="container">
+                <a class="navbar-brand site-brand" asp-area="" asp-controller="Home" asp-action="Index">🛍 Webstore</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Меню">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Каталог</a></li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
+                                    Корзина @await Component.InvokeAsync("CartCount")
+                                </a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">Мои заказы</a></li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">Админ-панель</a></li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav align-items-md-center gap-md-2">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item"><span class="nav-user">👤 @User.Identity.Name</span></li>
+                            <li class="nav-item">
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                    <button type="submit" class="btn-outline-shop">Выйти</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Войти</a></li>
+                            <li class="nav-item"><a class="btn-shop" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="site-main">
+            @if (TempData["Message"] != null)
+            {
+                <div class="flash flash-success">@TempData["Message"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="flash flash-error">@TempData["Error"]</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">&copy; 2026 Webstore — учебный интернет-магазин</div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

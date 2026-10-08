@@ -1,0 +1,12 @@
+﻿@model WebApplication1.Models.Order
+
+<div class="mb-3">
+    <label asp-for="UserId" class="form-label">Пользователь</label>
+    <select asp-for="UserId" asp-items="ViewBag.Users" class="form-select"></select>
+    <span asp-validation-for="UserId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="CreatedAt" class="form-label">Дата создания</label>
+    <input asp-for="CreatedAt" type="datetime-local" class="form-control" />
+    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+</div>

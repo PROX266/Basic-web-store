@@ -1,0 +1,76 @@
+@model WebApplication1.Models.Cart
+
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<div class="page-header page-header-row">
+    <h1>@ViewData["Title"]</h1>
+    <a asp-controller="Products" asp-action="Index" class="btn-outline-shop">← Продолжить покупки</a>
+</div>
+
+@if (Model.CartItems.Any())
+{
+    <div class="panel">
+        <div class="table-scroll">
+            <table class="shop-table cart-table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Сумма</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CartItems.OrderBy(ci => ci.Id))
+                    {
+                        <tr data-price="@item.Product.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                            <td>
+                                <div class="cart-product">
+                                    <img src="@Url.Content("~" + item.Product.ImageUrl)" alt="@item.Product.ProductName" class="cart-thumb" />
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId" class="cart-product-name">@item.Product.ProductName</a>
+                                </div>
+                            </td>
+                            <td class="money">@item.Product.Price.ToString("N2") ₽</td>
+                            <td>
+                                <form asp-action="UpdateQuantity" method="post" class="cart-quantity-form">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <input type="number" name="quantity" value="@item.Quantity" min="0" max="99" class="qty-input cart-quantity-input" />
+                                </form>
+                            </td>
+                            <td class="money row-sum">@((item.Quantity * item.Product.Price).ToString("N2")) ₽</td>
+                            <td>
+                                <form asp-action="Remove" method="post">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn-danger-soft">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total">
+                Итого: <span id="cart-total">@Model.CartItems.Sum(i => i.Quantity * i.Product.Price).ToString("N2")</span> ₽
+            </div>
+            <form asp-action="Checkout" method="post">
+                <button type="submit" class="btn-shop btn-lg">Оформить заказ</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="empty-box">
+        <p>Ваша корзина пуста</p>
+        <a asp-controller="Products" asp-action="Index" class="btn-shop">Перейти к каталогу товаров</a>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+}

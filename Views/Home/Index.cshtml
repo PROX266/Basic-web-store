@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<section class="hero">
+    <h1>Добро пожаловать в Webstore</h1>
+    <p>Телефоны, ноутбуки и аксессуары — выбирайте, добавляйте в корзину и оформляйте заказ в пару кликов.</p>
+    <div class="hero-actions">
+        <a asp-controller="Products" asp-action="Index" class="btn-shop btn-lg">Перейти в каталог</a>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a asp-controller="Cart" asp-action="Index" class="btn-outline-shop btn-lg">Моя корзина</a>
+        }
+        else
+        {
+            <a asp-controller="Account" asp-action="Login" class="btn-outline-shop btn-lg">Войти</a>
+        }
+    </div>
+</section>
